@@ -1,5 +1,8 @@
 # Changelog
 
+## Phase 04.1 — 2026-11-14
+- Resume button now opens Kavya's updated one-page résumé (`public/Kavya_Wani_Resume.pdf`). Source Word file: `Kavya_Wani_Resume.docx` in the project root (not published).
+
 ## Phase 04 — 2026-11-14 (published)
 - Hosted free on GitHub Pages (repo `kavya-arch-cmd/portfolio`, deployed by `.github/workflows/deploy.yml` on every push to `main`).
 - Live at https://www.kavyawani.indevs.in/ (Stackryze DNS: `www` CNAME → `kavya-arch-cmd.github.io`; the bare domain could not take a root record in the Stackryze form).

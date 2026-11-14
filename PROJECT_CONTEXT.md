@@ -44,5 +44,5 @@ Published: https://www.kavyawani.indevs.in/ — every push to `main` on github.c
 - **Phase 01 — complete (awaiting review):** miniature world, road, six destinations, SUV journeys, header, content panels with placeholders, responsive camera.
 - **Phase 01.3 — speed and loading:** scene lazy-loaded behind a loading screen; vendor chunks split (see `vite.config.ts`). Keep `App.tsx` and `src/ui/*` free of three.js imports so the first download stays small.
 - **Phase 02 — real content:** content in `src/content/portfolio.ts` (sources: `Personal INFO.txt`, Kavya's résumé). Project screenshots live in `public/projects/`.
-- Open items: Microsoft Excel and Web Designing & PHP certificate files (dates, links, "K P B" vs "LBP" Hinduja); Diwali invitation link; updated résumé PDF.
+- Open items: Microsoft Excel and Web Designing & PHP certificate files (dates, links, "K P B" vs "LBP" Hinduja); Diwali invitation link; updated résumé — done; to update it, edit `Kavya_Wani_Resume.docx`, export to PDF and replace `public/Kavya_Wani_Resume.pdf`.
 - Certificate PDFs are published from `public/certificates/`; the originals Kavya uploaded stay in the project root.

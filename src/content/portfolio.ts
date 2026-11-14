@@ -294,4 +294,4 @@ export const contact = {
 };
 
 /** Path or URL to the résumé PDF (e.g. '/resume.pdf' placed in /public). */
-export const resumeUrl: Field = todo('Updated résumé PDF — coming later');
+export const resumeUrl: Field = '/Kavya_Wani_Resume.pdf';
