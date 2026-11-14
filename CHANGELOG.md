@@ -1,5 +1,8 @@
 # Changelog
 
+## Phase 04.2 — 2026-11-14
+- Experience (site and résumé): the MIS line now describes the MIS web application Kavya built through AI-driven development (Tally Trial Balance → monthly P&L, EBITDA, working capital and budget-variance reports).
+
 ## Phase 04.1 — 2026-11-14
 - Resume button now opens Kavya's updated one-page résumé (`public/Kavya_Wani_Resume.pdf`). Source Word file: `Kavya_Wani_Resume.docx` in the project root (not published).
 

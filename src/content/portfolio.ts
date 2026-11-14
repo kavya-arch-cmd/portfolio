@@ -207,7 +207,7 @@ export const experience: TimelineEntry[] = [
     period: 'October 2026 – Present',
     details: [
       'Work on AI automation with the accounting team, and help enhance and test the company’s software products.',
-      'MIS reporting: financial reports, monthly EBITDA, revenue and profitability analysis, and working capital analysis.',
+      'Built an MIS web application through AI-driven development that turns Tally Trial Balances into monthly P&L, EBITDA, working capital and budget-variance reports.',
       'Build Excel-based reports and dashboards.',
     ],
   },
