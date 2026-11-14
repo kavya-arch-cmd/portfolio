@@ -1,5 +1,10 @@
 # Changelog
 
+## Phase 04 — 2026-11-14 (published)
+- Hosted free on GitHub Pages (repo `kavya-arch-cmd/portfolio`, deployed by `.github/workflows/deploy.yml` on every push to `main`).
+- Live at https://www.kavyawani.indevs.in/ (Stackryze DNS: `www` CNAME → `kavya-arch-cmd.github.io`; the bare domain could not take a root record in the Stackryze form).
+- Portfolio project card: added Live site and GitHub links, removed "In development".
+
 ## Phase 02.7 — 2026-11-14
 - Added "Prompt engineering" to AI-Driven Development & Productivity.
 - Added this portfolio as the first project ("Interactive 3D Portfolio", in development) with a real screenshot (`public/projects/portfolio.jpg`). No links until it is published.

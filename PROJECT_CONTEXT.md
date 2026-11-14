@@ -7,7 +7,9 @@ Visual contract: `DESIGN_SYSTEM.md` (read it before any UI change). Reference: `
 - three.js via @react-three/fiber and @react-three/drei (real 3D geometry, perspective full-3D camera)
 - Manrope (self-hosted via @fontsource-variable/manrope)
 
-Run: `npm install`, `npm run dev`, `npm run build`.
+Run: `npm install`, `npm run dev`, `npm run build`. (In PowerShell use `npm.cmd` — script execution is blocked.)
+
+Published: https://www.kavyawani.indevs.in/ — every push to `main` on github.com/kavya-arch-cmd/portfolio rebuilds and deploys via GitHub Actions. DNS lives in Stackryze DNS (`www` CNAME → `kavya-arch-cmd.github.io`).
 
 ## Structure
 | Path | Purpose |

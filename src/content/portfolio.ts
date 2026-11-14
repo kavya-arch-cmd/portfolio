@@ -82,7 +82,6 @@ export const projects: Project[] = [
     title: 'Interactive 3D Portfolio',
     tagline: 'This website — a miniature village you explore by car',
     context: 'Personal project · 2026',
-    status: 'In development',
     image: {
       src: '/projects/portfolio.jpg',
       alt: 'The portfolio world: a red SUV on a winding road linking five destinations in a meadow village with a windmill and farm field',
@@ -96,7 +95,10 @@ export const projects: Project[] = [
       'Quick first load: the page appears at once and the 3D scene loads behind a loading screen.',
     ],
     technologies: ['React', 'TypeScript', 'Vite', 'Three.js', 'React Three Fiber'],
-    links: [],
+    links: [
+      { label: 'Live site', href: 'https://www.kavyawani.indevs.in/' },
+      { label: 'GitHub', href: 'https://github.com/kavya-arch-cmd/portfolio' },
+    ],
   },
   {
     title: 'Vibe Analysis',
