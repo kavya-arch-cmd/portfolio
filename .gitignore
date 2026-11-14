@@ -1,0 +1,11 @@
+node_modules
+dist
+*.local
+*.tsbuildinfo
+.claude/
+
+# Private source material — not published
+Personal INFO.txt
+*.docx
+/*.pdf
+design-reference.png.png
