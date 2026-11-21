@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { sceneTime } from './perf';
 import { WORLD_SCALE } from './scale';
 
 /**
@@ -221,14 +222,14 @@ export function LeafBurst({ origin, trigger }: { origin: THREE.Vector3 | null; t
     if (mesh.current.instanceColor) mesh.current.instanceColor.needsUpdate = true;
   }, []);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     const im = mesh.current;
     if (!im) return;
     if (trigger !== lastTrigger.current) {
       lastTrigger.current = trigger;
       if (origin && !worldTime.reduced) {
         state.current = {
-          start: clock.elapsedTime,
+          start: sceneTime.t,
           parts: Array.from({ length: LEAVES }, () => {
             const a = Math.random() * Math.PI * 2;
             const out = 1.2 + Math.random() * 1.8;
@@ -245,7 +246,7 @@ export function LeafBurst({ origin, trigger }: { origin: THREE.Vector3 | null; t
       im.visible = false;
       return;
     }
-    const t = clock.elapsedTime - s.start;
+    const t = sceneTime.t - s.start;
     if (t > BURST_LIFE) {
       state.current = null;
       im.visible = false;

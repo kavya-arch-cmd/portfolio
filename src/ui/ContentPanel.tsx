@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { DESTINATION_BY_ID, type Destination, type DestinationId } from '../content/destinations';
 import { ContactBody, ResumeBody, SectionBody } from './Sections';
+import { SoundToggle } from './Sound';
 
 export type PanelId = DestinationId | 'resume' | 'contact';
 
@@ -11,11 +12,13 @@ export function ContentPanel({
   onClose,
   next,
   onNext,
+  sound,
 }: {
   id: PanelId;
   onClose: () => void;
   next: Destination | null;
   onNext: (id: DestinationId) => void;
+  sound: { on: boolean; toggle: () => void };
 }) {
   const heading = useRef<HTMLHeadingElement>(null);
   const returnFocus = useRef<Element | null>(null);
@@ -44,6 +47,7 @@ export function ContentPanel({
           </svg>
           Back to the world
         </button>
+        <SoundToggle on={sound.on} onToggle={sound.toggle} className="sound-toggle--bar" />
       </div>
       <div className="page__scroll">
         <div className="page__inner">

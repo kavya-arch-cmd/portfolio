@@ -15,6 +15,8 @@
 
   --line: rgba(41, 38, 34, 0.14);
   --header-h: 60px;
+  --gutter: clamp(16px, 3vw, 40px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
   --font: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   color-scheme: light;
@@ -55,6 +57,7 @@ button {
 
 .app {
   height: 100%;
+  height: 100dvh; /* follows the phone's collapsing address bar */
   display: flex;
   flex-direction: column;
 }
@@ -67,7 +70,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 clamp(16px, 3vw, 40px);
+  padding: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px));
   background: var(--color-ground);
   border-bottom: 1px solid var(--line);
   position: relative;
@@ -177,10 +180,18 @@ button {
   inset: 0;
   touch-action: none;
 }
-.reset-view {
+.stage-controls {
   position: absolute;
-  right: clamp(16px, 3vw, 40px);
-  bottom: 20px;
+  right: var(--gutter);
+  bottom: calc(20px + var(--safe-b));
+  display: flex;
+  gap: 8px;
+}
+.reset-view,
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   min-height: 38px;
   padding: 0 14px;
   background: var(--color-paper);
@@ -190,16 +201,29 @@ button {
   font-weight: 650;
   cursor: pointer;
 }
-.reset-view:hover {
+.reset-view:hover,
+.sound-toggle:hover {
   background: #fff;
+}
+.sound-toggle[aria-pressed='true'] {
+  color: var(--color-terracotta);
+  border-color: rgba(198, 93, 53, 0.45);
+}
+.sound-toggle--bar {
+  margin-left: auto;
+  min-height: 34px;
+  padding: 0 10px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--color-muted);
 }
 .status {
   position: absolute;
-  left: clamp(16px, 3vw, 40px);
-  bottom: 20px;
+  left: var(--gutter);
+  bottom: calc(20px + var(--safe-b));
   margin: 0;
   padding: 8px 14px;
-  max-width: calc(100% - 32px);
+  max-width: calc(100% - 2 * var(--gutter) - 270px);
   background: var(--color-paper);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -207,6 +231,91 @@ button {
   font-weight: 600;
   color: var(--color-ink);
   pointer-events: none;
+}
+
+/* ── Notices (browser limits) ───────────────────────────── */
+.notices {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 2 * var(--gutter)));
+  display: grid;
+  gap: 8px;
+  z-index: 6;
+  pointer-events: none;
+}
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 10px 10px 14px;
+  background: var(--color-paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--color-terracotta);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  pointer-events: auto;
+}
+.notice__text {
+  flex: 1;
+}
+.notice__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: -6px -4px -6px 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.notice__close:hover {
+  background: rgba(41, 38, 34, 0.06);
+  color: var(--color-ink);
+}
+.notice__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-terracotta);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* No-WebGL fallback: direct links to every section. */
+.fallback {
+  max-width: 440px;
+}
+.fallback__lead {
+  margin: 20px 0 8px;
+  font-weight: 700;
+}
+.fallback__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.fallback__item {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--color-paper);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.fallback__item:hover {
+  background: #fff;
 }
 
 /* ── Loading screen ─────────────────────────────────────── */
@@ -356,6 +465,9 @@ button {
   color: var(--color-ink);
   background: rgba(41, 38, 34, 0.06);
 }
+.page__body {
+  overflow-wrap: break-word;
+}
 .page__body h3 {
   margin: 24px 0 8px;
   font-size: 17px;
@@ -494,25 +606,94 @@ dd {
 @media (max-width: 640px) {
   :root {
     --header-h: 56px;
+    --gutter: 12px;
+  }
+  .header {
+    gap: 8px;
+  }
+  .brand__name {
+    font-size: 18px;
   }
   .brand__rule,
   .brand__sub {
     display: none;
   }
+  .nav {
+    gap: 2px;
+  }
   .nav__item {
-    padding: 0 10px;
+    gap: 5px;
+    min-height: 40px;
+    padding: 0 9px;
+    font-size: 13.5px;
   }
   .menu__list {
     position: fixed;
-    left: 16px;
-    right: 16px;
+    left: var(--gutter);
+    right: var(--gutter);
     top: calc(var(--header-h) + 8px);
     min-width: 0;
   }
-  .status {
-    left: 16px;
-    bottom: 16px;
+  .menu__item {
+    min-height: 44px;
+  }
+  /* Controls move to the top-right; the hint spans the bottom. */
+  .stage-controls {
+    top: 12px;
+    bottom: auto;
+  }
+  .reset-view,
+  .sound-toggle {
+    min-height: 40px;
+    padding: 0 12px;
     font-size: 13px;
+  }
+  .status {
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(12px + var(--safe-b));
+    max-width: none;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .notices {
+    top: 62px;
+    font-size: 13px;
+  }
+  .page__bar {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .page__inner {
+    padding-bottom: calc(48px + var(--safe-b));
+  }
+  .page__hero h2 {
+    font-size: 32px;
+    overflow-wrap: anywhere;
+  }
+  .lead {
+    font-size: 17px;
+  }
+  .button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  .link-row a,
+  .links a {
+    display: inline-block;
+    padding: 6px 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav__item {
+    padding: 0 7px;
+    font-size: 13px;
+  }
+  .nav__item--menu svg {
+    display: none;
   }
 }
 
@@ -526,14 +707,6 @@ dd {
   }
   .page {
     animation: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .reset-view {
-    top: 12px;
-    bottom: auto;
-    right: 16px;
   }
 }
 

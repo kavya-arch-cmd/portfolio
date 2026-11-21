@@ -1,5 +1,6 @@
+import { PerformanceMonitor } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import type { DestinationId } from '../content/destinations';
@@ -11,11 +12,15 @@ import { Meadow } from './Meadow';
 import { Village } from './Village';
 import { PLACEMENTS } from './layout';
 import { Birds, LeafBurst, WorldClock } from './life';
+import { FrameBudget, wakeShadows } from './perf';
 import { Periphery } from './Periphery';
 import { Road } from './Road';
+import { WEBGL_LOST_EVENT } from './events';
 
 /** Phones and tablets get a lighter shadow map and pixel ratio so the first frame and every frame after stay quick. */
 const LIGHT = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+/** Sharpest pixel ratio we render at; the performance monitor steps down to 1 on slow GPUs. */
+const MAX_DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, LIGHT ? 1.5 : 2));
 
 /**
  * Compiles every material once the scene is mounted, then reports ready after the first
@@ -65,6 +70,7 @@ export function World({
   onArrive,
   onReady,
   focusId,
+  paused,
 }: {
   focusId: { id: DestinationId; nonce: number } | null;
   request: DriveRequest | null;
@@ -73,6 +79,8 @@ export function World({
   onSelect: (id: DestinationId) => void;
   onArrive: (id: DestinationId) => void;
   onReady: () => void;
+  /** True while a full-screen page covers the world: stop rendering to save battery and GPU. */
+  paused: boolean;
 }) {
   const car = useRef<CarState>({ pos: new THREE.Vector3(), heading: 0 }).current;
   const drivingRef = useRef(false);
@@ -82,10 +90,16 @@ export function World({
     const s = PLACEMENTS[focusId.id].sign;
     return new THREE.Vector3(s.x, s.y + 2.6, s.z);
   }, [focusId]);
+  // Arrival hop and leaf burst move shadow casters: keep shadows live while they play.
+  useEffect(() => {
+    if (focusId) wakeShadows(3.2);
+  }, [focusId]);
+  const [dpr, setDpr] = useState(MAX_DPR);
   return (
     <Canvas
       shadows="percentage"
-      dpr={[1, LIGHT ? 1.5 : 2]}
+      dpr={dpr}
+      frameloop={paused ? 'never' : 'always'}
       camera={{ position: [0, 40, 50], fov: 28, near: 0.5, far: 500 }}
       onCreated={(state) => {
         state.gl.toneMapping = THREE.NeutralToneMapping;
@@ -94,11 +108,23 @@ export function World({
         const pmrem = new THREE.PMREMGenerator(state.gl);
         state.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
         state.scene.environmentIntensity = 0.35;
+        state.gl.domElement.addEventListener('webglcontextlost', (e) => {
+          e.preventDefault();
+          window.dispatchEvent(new Event(WEBGL_LOST_EVENT));
+        });
         if (import.meta.env.DEV) (window as unknown as { __r3f: unknown }).__r3f = state;
       }}
       onPointerMissed={() => (document.body.style.cursor = '')}
     >
       <color attach="background" args={['#F3E6D5']} />
+      {/* Drop to a lighter pixel ratio when frames run slow; restore it when they recover. */}
+      <PerformanceMonitor
+        flipflops={3}
+        onDecline={() => setDpr(1)}
+        onIncline={() => setDpr(MAX_DPR)}
+        onFallback={() => setDpr(1)}
+      />
+      <FrameBudget drivingRef={drivingRef} />
       <Lights />
       <Meadow />
       <Village />

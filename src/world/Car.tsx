@@ -6,6 +6,7 @@ import type { DestinationId } from '../content/destinations';
 import { HOME_U, STOP_U } from './layout';
 import { Box } from './parts';
 import { ROAD_LENGTH, ROAD_Y, roadFrame } from './roadPath';
+import { sceneTime } from './perf';
 import { contactShadowTexture } from './textures';
 
 /** Live car pose shared with the camera rig. */
@@ -172,17 +173,17 @@ export function Car({
 
   const body = useRef<THREE.Group>(null!);
   const pitch = useRef(0);
-  useFrame((state, dt) => {
+  useFrame((_, dt) => {
     const j = journey.current;
     // Body squats a touch when pulling away and dips when braking; brake lights brighten.
-    const phase = j && j.t0 >= 0 ? Math.min(1, (state.clock.elapsedTime - j.t0) / j.dur) : 1;
+    const phase = j && j.t0 >= 0 ? Math.min(1, (sceneTime.t - j.t0) / j.dur) : 1;
     const braking = !!j && phase > 0.72;
     const target = !j || reducedMotion ? 0 : phase < 0.2 ? -0.03 : braking ? 0.035 : 0;
     pitch.current += (target - pitch.current) * (1 - Math.exp(-dt * 6));
     if (body.current) body.current.rotation.x = pitch.current;
     taillight.emissiveIntensity += ((braking ? 1.6 : 0.4) - taillight.emissiveIntensity) * (1 - Math.exp(-dt * 8));
     if (!j) return;
-    const now = state.clock.elapsedTime;
+    const now = sceneTime.t;
     if (j.t0 < 0) j.t0 = now;
     const p = Math.min(1, (now - j.t0) / j.dur);
     const s = travelled(p) * j.dist;

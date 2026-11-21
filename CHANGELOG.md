@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 05 — 2026-11-21 (mobile, sound, smoother motion, browser warnings)
+- Mobile: the header now fits phones (the Contact button was cut off at 375px); page height follows the phone's address bar (`100dvh`) and respects notches/home bar (safe-area insets); controls sit top-right, the hint spans the bottom; larger tap targets; content pages use a full-width "Drive on" button and wrap long links.
+- Ambient sound (`src/ui/ambience.ts`, `src/ui/Sound.tsx`): distant town traffic, breeze, cars passing now and then, birdsong, and an engine hum while the SUV drives. Synthesised with the Web Audio API (no audio files). Off by default; "Sound on/off" button beside Reset view and in every page's top bar; the choice is remembered and the sound pauses when the tab is hidden.
+- Smoother motion (`src/world/perf.tsx`): the shadow map was redrawn every frame (≈1,290 draw calls/frame); it now updates every frame only while the car drives or an arrival effect plays, and a few times a second otherwise. Pixel ratio steps down to 1 automatically when frames run slow. The 3D world stops rendering while a full-screen page covers it. Car, signboard hop and leaf burst use a hitch-proof clock so a slow frame never makes them jump.
+- Browser warnings (`src/ui/webgl.ts`, `src/ui/Notices.tsx`): WebGL is checked before three.js downloads. No WebGL → a clear message on how to turn on hardware acceleration, plus buttons for every section. Software-only 3D → a dismissible "3D may feel slow here" notice. Reduced-motion devices → a dismissible note that the world stays still. Lost graphics context → a "Reload the page" notice.
+
 ## Phase 04.2 — 2026-11-14
 - Experience (site and résumé): the MIS line now describes the MIS web application Kavya built through AI-driven development (Tally Trial Balance → monthly P&L, EBITDA, working capital and budget-variance reports).
 

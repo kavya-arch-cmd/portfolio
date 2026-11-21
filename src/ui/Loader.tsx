@@ -20,7 +20,7 @@ export function Loader({ done }: { done: boolean }) {
 }
 
 /** If WebGL is unavailable or the scene fails, keep the site usable through the menu. */
-export class SceneBoundary extends Component<{ children: ReactNode; onFail: () => void }, { failed: boolean }> {
+export class SceneBoundary extends Component<{ children: ReactNode; onFail: () => void; fallback: ReactNode }, { failed: boolean }> {
   state = { failed: false };
 
   static getDerivedStateFromError() {
@@ -34,14 +34,6 @@ export class SceneBoundary extends Component<{ children: ReactNode; onFail: () =
 
   render() {
     if (!this.state.failed) return this.props.children;
-    return (
-      <div className="scene-fallback">
-        <div className="loader__inner">
-          <p className="loader__kicker">KAVYA · Portfolio</p>
-          <p className="loader__title">The 3D world couldn’t load on this device.</p>
-          <p className="loader__hint">Every section is still here — open the Destinations menu above.</p>
-        </div>
-      </div>
-    );
+    return this.props.fallback;
   }
 }

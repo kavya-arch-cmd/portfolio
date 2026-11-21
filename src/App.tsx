@@ -3,7 +3,10 @@ import { DESTINATIONS, DESTINATION_BY_ID, type DestinationId } from './content/d
 import { ContentPanel, type PanelId } from './ui/ContentPanel';
 import { Header } from './ui/Header';
 import { Loader, SceneBoundary } from './ui/Loader';
+import { Notices, NoWebGL } from './ui/Notices';
+import { SoundToggle, useSound } from './ui/Sound';
 import { useReducedMotion } from './ui/useReducedMotion';
+import { detectWebGL } from './ui/webgl';
 import type { DriveRequest } from './world/Car';
 import { RESET_VIEW_EVENT } from './world/events';
 
@@ -11,6 +14,8 @@ import { RESET_VIEW_EVENT } from './world/events';
 const World = lazy(() => import('./world/World'));
 
 const TOUCH = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+/** Checked once, before three.js downloads. */
+const WEBGL = detectWebGL();
 
 export default function App() {
   const reducedMotion = useReducedMotion();
@@ -25,8 +30,24 @@ export default function App() {
   const onReady = useCallback(() => setReady(true), []);
   const reducedRef = useRef(reducedMotion);
   reducedRef.current = reducedMotion;
+  // No 3D (unsupported, or the scene failed): destinations open directly as pages.
+  const [noScene, setNoScene] = useState(WEBGL === 'none');
+  const noSceneRef = useRef(noScene);
+  noSceneRef.current = noScene;
+  const sound = useSound(driving !== null);
+  const onSceneFail = useCallback(() => {
+    setNoScene(true);
+    setReady(true);
+  }, []);
+  useEffect(() => {
+    if (WEBGL === 'none') setReady(true);
+  }, []);
 
   const select = useCallback((id: DestinationId) => {
+    if (noSceneRef.current) {
+      setPanel(id);
+      return;
+    }
     if (drivingRef.current) return; // never overlap journeys
     window.clearTimeout(openTimer.current);
     if (location.current === id) {
@@ -57,7 +78,9 @@ export default function App() {
 
   const status = driving
     ? `Driving to ${DESTINATION_BY_ID[driving].title}…`
-    : `Choose a signboard — the car will drive you there. ${TOUCH ? 'Drag to move, pinch to zoom.' : 'Drag to rotate, scroll to zoom.'}`;
+    : TOUCH
+      ? 'Tap a signboard to drive there. Drag to move, pinch to zoom.'
+      : 'Choose a signboard — the car will drive you there. Drag to rotate, scroll to zoom.';
 
   const idx = panel && panel !== 'resume' && panel !== 'contact'
     ? DESTINATIONS.findIndex((d) => d.id === panel)
@@ -69,22 +92,45 @@ export default function App() {
       <Header onSelect={select} onOpen={setPanel} driving={driving !== null} />
       <main className="stage" aria-label="Miniature road world">
         <div className="stage__canvas" role="img" aria-label="An isometric miniature world: a red SUV on a winding road that links five portfolio destinations. Use the Destinations menu to travel.">
-          <SceneBoundary onFail={onReady}>
-            <Suspense fallback={null}>
-              <World focusId={focus} request={request} reducedMotion={reducedMotion} driving={driving !== null} onSelect={select} onArrive={arrive} onReady={onReady} />
-            </Suspense>
-          </SceneBoundary>
+          {WEBGL === 'none' ? (
+            <NoWebGL onSelect={select} />
+          ) : (
+            <SceneBoundary onFail={onSceneFail} fallback={<NoWebGL onSelect={select} />}>
+              <Suspense fallback={null}>
+                <World
+                  focusId={focus}
+                  request={request}
+                  reducedMotion={reducedMotion}
+                  driving={driving !== null}
+                  onSelect={select}
+                  onArrive={arrive}
+                  onReady={onReady}
+                  paused={panel !== null}
+                />
+              </Suspense>
+            </SceneBoundary>
+          )}
         </div>
         <Loader done={ready} />
-        <p className="status" aria-live="polite">
-          {status}
-        </p>
-        <button
-          className="reset-view"
-          onClick={() => window.dispatchEvent(new Event(RESET_VIEW_EVENT))}
-        >
-          Reset view
-        </button>
+        {!noScene && (
+          <>
+            <Notices slow={WEBGL === 'slow'} reducedMotion={reducedMotion} />
+            <p className="status" aria-live="polite">
+              {status}
+            </p>
+            <div className="stage-controls">
+              <SoundToggle on={sound.on} onToggle={sound.toggle} />
+              <button className="reset-view" onClick={() => window.dispatchEvent(new Event(RESET_VIEW_EVENT))}>
+                Reset view
+              </button>
+            </div>
+          </>
+        )}
+        {noScene && (
+          <div className="stage-controls">
+            <SoundToggle on={sound.on} onToggle={sound.toggle} />
+          </div>
+        )}
       </main>
       {panel && (
         <ContentPanel
@@ -92,6 +138,7 @@ export default function App() {
           onClose={closePanel}
           next={next}
           onNext={select}
+          sound={sound}
         />
       )}
     </div>

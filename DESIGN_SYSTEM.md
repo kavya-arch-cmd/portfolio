@@ -193,6 +193,10 @@ Motion rules:
 - Provide a direct-access navigation alternative.
 - Respect reduced-motion preferences.
 
+### Sound and browser notices (requested by Kavya 2026-11-21)
+- Optional ambient sound: distant town traffic, breeze, occasional passing cars and birdsong, engine hum while driving. Off by default, quiet, toggled with a plain "Sound on/off" button; never autoplays.
+- When the browser limits the world (no WebGL, software-only 3D, reduced motion, lost graphics), a small flat notice in the paper colour with a terracotta left rule explains it. No WebGL shows direct buttons to every section instead of the world.
+
 ### Village landscape (approved 2026-11-14)
 - Ground: soft meadow patches (sage, olive-green, dry gold), never flat colour, never blue-green.
 - Grass is drawn as soft rounded clumps that match the blob trees, not thin spiky blades. Flowers grow in small drifts of one or two warm colours.

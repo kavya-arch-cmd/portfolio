@@ -4,6 +4,7 @@ import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { worldTime } from './life';
 import { M } from './materials';
+import { sceneTime } from './perf';
 import { Box } from './parts';
 import { signTexture } from './textures';
 
@@ -33,16 +34,16 @@ export function Signboard({
   const board = useRef<THREE.Group>(null!);
   const hop = useRef({ nonce: celebrate, start: -1 });
   // Turn the board to face the viewer so it stays readable from any orbit angle.
-  useFrame(({ camera, clock }) => {
+  useFrame(({ camera }) => {
     const g = group.current;
     g.rotation.y = Math.atan2(camera.position.x - g.position.x, camera.position.z - g.position.z);
     const h = hop.current;
     if (celebrate !== h.nonce) {
       h.nonce = celebrate;
-      h.start = celebrate && !worldTime.reduced ? clock.elapsedTime : -1;
+      h.start = celebrate && !worldTime.reduced ? sceneTime.t : -1;
     }
     const b = board.current;
-    const t = h.start < 0 ? 99 : clock.elapsedTime - h.start;
+    const t = h.start < 0 ? 99 : sceneTime.t - h.start;
     const decay = Math.exp(-t * 2.2);
     b.position.y = boardY + (hovered ? 0.08 : 0) + (t < 3 ? Math.abs(Math.sin(t * 6)) * 0.35 * decay : 0);
     b.rotation.z = t < 3 ? Math.sin(t * 9) * 0.09 * decay : 0;
