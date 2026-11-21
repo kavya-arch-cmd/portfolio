@@ -28,9 +28,9 @@ Everything below is **done and live**:
 - One-page ATS résumé (Word + PDF) connected to the site's Resume button.
 - LinkedIn banner (`branding/linkedin-banner.png`) and a tech-stack PDF (`Portfolio_Tech_Stack.pdf`) created.
 
-- Phase 05 (21 Nov 2026, committed, not yet pushed): mobile layout fixes, ambient sound toggle, smoother motion (throttled shadows, adaptive pixel ratio, paused rendering behind pages), WebGL / slow-3D / reduced-motion warnings. See `CHANGELOG.md`.
+- Phase 05 (21 Nov 2026, live): mobile layout fixes, ambient sound toggle, smoother motion (throttled shadows, adaptive pixel ratio, paused rendering behind pages), WebGL / slow-3D / reduced-motion warnings. See `CHANGELOG.md`.
 
-**Committed but not pushed** (21 Nov 2026): the handover files and Phase 05. Push when Kavya asks. The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
+**All work is committed and live** as of 21 Nov 2026, including the Phase 05.1 phone camera fix. The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
 
 **Open items / waiting on Kavya:**
 1. Certificate files for **Microsoft Excel (SkillCourse, 2026)** and **Web Designing & PHP Development (Asterix Solution, 2024)** — to add dates/"View certificate" links and confirm whether the college is "K P B" or "LBP" Hinduja.
@@ -107,7 +107,7 @@ React 19.3 + TypeScript 7.0 + Vite 8.3 · three.js 0.187 via @react-three/fiber 
 | `src/world/layout.ts` | Positions of platforms, buildings, signs, car stops (authored coords × `WORLD_SCALE` in `scale.ts`) |
 | `src/world/roadPath.ts`, `Road.tsx` | The road loop and its geometry |
 | `src/world/Car.tsx` | The SUV and journey logic |
-| `src/world/CameraRig.tsx`, `camera.ts`, `shots.ts` | Camera: overview framing, free orbit, chase view, arrival close-ups |
+| `src/world/CameraRig.tsx`, `camera.ts`, `shots.ts` | Camera: overview framing, free orbit, chase view, arrival close-ups (chase distance and close-ups adapt to screen shape on phones) |
 | `src/world/Destinations.tsx`, `Signboard.tsx`, `buildings/*` | Destination platforms, buildings, signboards |
 | `src/world/Landscape.tsx`, `Periphery.tsx` | Trees, rocks, grass clumps, flowers, pond, outer forest belt |
 | `src/world/Meadow.tsx`, `Village.tsx` | Meadow ground; windmill, crop field, haystacks |

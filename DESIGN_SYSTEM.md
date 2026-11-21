@@ -223,6 +223,7 @@ Motion rules:
 - Do not crop important destinations.
 
 ### Mobile
+- Chase and arrival cameras adapt to the screen shape (2026-11-21): on portrait screens they sit further back so the car, road and every full signboard name stay in frame.
 - Use an adapted camera framing, controlled pan/zoom, or a simplified navigable scene.
 - Ensure destinations remain reachable and labels remain legible.
 - Provide accessible direct navigation if the complete miniature world cannot fit.

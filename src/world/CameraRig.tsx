@@ -6,7 +6,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import type { DestinationId } from '../content/destinations';
 import { CAMERA_FOV, VIEW_DIR, WORLD_BOUNDS, distanceForWidth, fitView } from './camera';
 import type { CarState } from './Car';
-import { SHOTS } from './shots';
+import { shotFor } from './shots';
 
 import { RESET_VIEW_EVENT } from './events';
 
@@ -22,6 +22,15 @@ type Mode = 'home' | 'chase' | 'shot' | 'free';
 const CHASE_BACK = 11;
 const CHASE_UP = 7.5;
 const CHASE_AHEAD = 2.5;
+/** World units the chase view should show across the screen at the car, at minimum. */
+const CHASE_MIN_WIDTH = 9;
+
+/** How much further back the chase camera sits on narrow screens (1 on desktop). */
+function chaseScale(aspect: number) {
+  const dist = Math.hypot(CHASE_BACK, CHASE_UP);
+  const visible = 2 * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV / 2)) * dist * aspect;
+  return THREE.MathUtils.clamp(CHASE_MIN_WIDTH / visible, 1, 2.8);
+}
 
 /**
  * Full 3D camera:
@@ -48,8 +57,12 @@ export function CameraRig({
   const touch = useMemo(() => window.matchMedia?.('(pointer: coarse)').matches ?? false, []);
   const home = useRef({ position: new THREE.Vector3(), target: new THREE.Vector3(), distance: 50 });
   const mode = useRef<Mode>('home');
+  const baseMax = useRef(120);
   const desiredPos = useRef(new THREE.Vector3());
   const desiredTarget = useRef(new THREE.Vector3());
+  const aspect = size.width / size.height;
+  const chaseK = chaseScale(aspect);
+  const shot = useMemo(() => (focusId ? shotFor(focusId.id, aspect, CAMERA_FOV) : null), [focusId, aspect]);
 
   // Compute the framed overview for the current viewport.
   useLayoutEffect(() => {
@@ -69,7 +82,8 @@ export function CameraRig({
     camera.far = 600;
     camera.updateProjectionMatrix();
     const c = controls.current;
-    if (c) c.maxDistance = Math.max(distance * 1.3, 30);
+    baseMax.current = Math.max(distance * 1.3, 30);
+    if (c) c.maxDistance = baseMax.current;
     if (mode.current === 'home') {
       camera.position.copy(home.current.position);
       camera.lookAt(target);
@@ -115,12 +129,11 @@ export function CameraRig({
     if (mode.current === 'chase') {
       fwd.current.set(Math.sin(car.heading), 0, Math.cos(car.heading));
       desiredTarget.current.copy(car.pos).addScaledVector(fwd.current, CHASE_AHEAD).setY(0.6);
-      desiredPos.current.copy(car.pos).addScaledVector(fwd.current, -CHASE_BACK).setY(CHASE_UP);
+      desiredPos.current.copy(car.pos).addScaledVector(fwd.current, -CHASE_BACK * chaseK).setY(CHASE_UP * chaseK);
       k = 2.2;
-    } else if (mode.current === 'shot' && focusId) {
-      const s = SHOTS[focusId.id];
-      desiredTarget.current.copy(s.target);
-      desiredPos.current.copy(s.position);
+    } else if (mode.current === 'shot' && shot) {
+      desiredTarget.current.copy(shot.target);
+      desiredPos.current.copy(shot.position);
       k = 1.8;
     } else if (mode.current === 'home') {
       desiredTarget.current.copy(home.current.target);
@@ -129,6 +142,8 @@ export function CameraRig({
     }
 
     if (k > 0) {
+      // Never let the zoom limit pull a wider guided view (phones) back in.
+      c.maxDistance = Math.max(baseMax.current, desiredPos.current.distanceTo(desiredTarget.current) * 1.05);
       const a = reducedMotion ? 1 : 1 - Math.exp(-dt * k);
       camera.position.lerp(desiredPos.current, a);
       c.target.lerp(desiredTarget.current, a);

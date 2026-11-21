@@ -1,5 +1,10 @@
 # Changelog
 
+## Phase 05.1 — 2026-11-21 (phone camera)
+- Arrival close-ups now adapt to the screen shape (`shotFor` in `src/world/shots.ts`): on portrait phones the camera backs away along the same line of sight and re-centres until the whole signboard and building front fit, so names like "SKILLS & TECHNOLOGIES" are never cropped. Wide screens keep the authored shots.
+- The chase camera sits further back on narrow screens (`chaseScale` in `CameraRig.tsx`) so the car and the road around it stay in view instead of filling the screen.
+- The zoom limit no longer pulls these wider guided views back in.
+
 ## Phase 05 — 2026-11-21 (mobile, sound, smoother motion, browser warnings)
 - Mobile: the header now fits phones (the Contact button was cut off at 375px); page height follows the phone's address bar (`100dvh`) and respects notches/home bar (safe-area insets); controls sit top-right, the hint spans the bottom; larger tap targets; content pages use a full-width "Drive on" button and wrap long links.
 - Ambient sound (`src/ui/ambience.ts`, `src/ui/Sound.tsx`): distant town traffic, breeze, cars passing now and then, birdsong, and an engine hum while the SUV drives. Synthesised with the Web Audio API (no audio files). Off by default; "Sound on/off" button beside Reset view and in every page's top bar; the choice is remembered and the sound pauses when the tab is hidden.
