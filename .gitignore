@@ -9,3 +9,9 @@ Personal INFO.txt
 *.docx
 /*.pdf
 design-reference.png.png
+
+# Résumé tooling: template is the original private Word file
+/resume-tools/
+
+# Personal branding files (LinkedIn banner, tech-stack sheet) — local only
+/branding/
