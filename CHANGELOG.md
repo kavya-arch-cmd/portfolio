@@ -1,5 +1,9 @@
 # Changelog
 
+## Phase 06.1 — 2026-11-21 (email buttons)
+- Email buttons (Quick view and Contact) still open the visitor's email app, and now also copy the address and say "Copied … — paste it into your email app". On computers with no email app set up for email links, the click used to appear to do nothing (`src/ui/EmailLink.tsx`).
+- Phone and email links on the Contact page no longer open an empty new tab.
+
 ## Phase 06 — 2026-11-21 (Quick view and search/sharing)
 - Quick view: one page with Kavya's summary, résumé download, email/LinkedIn/GitHub, experience, projects, skills, education, certificates and contact — no drive needed. Opened from a "Quick view" header button (desktop) or a button at the top-left of the world (phones; usable while the world loads). Each block links to the full section page. Built only from `portfolio.ts` (`QuickViewBody` in `Sections.tsx`); `profile.title` added.
 - Search and link previews (`index.html`): title "Kavya Wani — Aspiring Data Scientist | Portfolio", description, canonical URL, Open Graph and Twitter tags with a 1200×630 preview image (`public/og-image.jpg`, source `branding/og-image.html`), schema.org Person data, and a `<noscript>` summary. Added `public/robots.txt` and `public/sitemap.xml`.

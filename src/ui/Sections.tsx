@@ -15,6 +15,7 @@ import {
   type LinkField,
   type TimelineEntry,
 } from '../content/portfolio';
+import { EmailLink } from './EmailLink';
 
 /** Renders `**bold**` spans inside a plain string. */
 function Rich({ text }: { text: string }) {
@@ -48,8 +49,11 @@ function Links({ links }: { links: LinkField[] }) {
           <span className="meta">{l.label}</span>{' '}
           {isTodo(l.href) ? (
             <F v={l.href} />
+          ) : l.href.startsWith('mailto:') ? (
+            <EmailLink email={l.href.slice(7)} />
           ) : (
-            <a href={l.href} target="_blank" rel="noreferrer">
+            // mailto:/tel: must not open an empty new tab
+            <a href={l.href} {...(/^https?:/.test(l.href) ? { target: '_blank', rel: 'noreferrer' } : {})}>
               {l.href.replace(/^(https?:\/\/|mailto:|tel:)/, '').replace(/\/$/, '')}
             </a>
           )}
@@ -279,9 +283,9 @@ export function QuickViewBody({ onOpen }: { onOpen: (id: DestinationId) => void 
             Download résumé (PDF)
           </a>
         )}
-        <a className="button button--ghost" href={`mailto:${contact.email}`}>
+        <EmailLink className="button button--ghost" email={contact.email}>
           Email
-        </a>
+        </EmailLink>
         {contact.links.map((l) =>
           isTodo(l.href) ? null : (
             <a key={l.label} className="button button--ghost" href={l.href} target="_blank" rel="noreferrer">

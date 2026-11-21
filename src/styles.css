@@ -873,3 +873,23 @@ dd {
     flex-wrap: wrap;
   }
 }
+
+/* Email link that also copies the address */
+.email-link__note:empty {
+  display: none;
+}
+.email-link__note {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-foliage);
+}
+.quick__actions .email-link {
+  display: contents;
+}
+.quick__actions .email-link__note {
+  order: 10;
+  flex-basis: 100%;
+  margin-top: 0;
+}
