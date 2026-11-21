@@ -28,9 +28,9 @@ Everything below is **done and live**:
 - One-page ATS résumé (Word + PDF) connected to the site's Resume button.
 - LinkedIn banner (`branding/linkedin-banner.png`) and a tech-stack PDF (`Portfolio_Tech_Stack.pdf`) created.
 
-- Phase 05 (21 Nov 2026, **local only — not yet committed**): mobile layout fixes, ambient sound toggle, smoother motion (throttled shadows, adaptive pixel ratio, paused rendering behind pages), WebGL / slow-3D / reduced-motion warnings. See `CHANGELOG.md`.
+- Phase 05 (21 Nov 2026, committed, not yet pushed): mobile layout fixes, ambient sound toggle, smoother motion (throttled shadows, adaptive pixel ratio, paused rendering behind pages), WebGL / slow-3D / reduced-motion warnings. See `CHANGELOG.md`.
 
-**Not yet committed/pushed** (local only at handover): this `CLAUDE.md`, a `.gitignore` update and a re-exported (same content) `public/Kavya_Wani_Resume.pdf`. Commit and push them when Kavya asks. The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
+**Committed but not pushed** (21 Nov 2026): the handover files and Phase 05. Push when Kavya asks. The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
 
 **Open items / waiting on Kavya:**
 1. Certificate files for **Microsoft Excel (SkillCourse, 2026)** and **Web Designing & PHP Development (Asterix Solution, 2024)** — to add dates/"View certificate" links and confirm whether the college is "K P B" or "LBP" Hinduja.
