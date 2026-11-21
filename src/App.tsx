@@ -82,7 +82,7 @@ export default function App() {
       ? 'Tap a signboard to drive there. Drag to move, pinch to zoom.'
       : 'Choose a signboard — the car will drive you there. Drag to rotate, scroll to zoom.';
 
-  const idx = panel && panel !== 'resume' && panel !== 'contact'
+  const idx = panel && panel !== 'resume' && panel !== 'contact' && panel !== 'overview'
     ? DESTINATIONS.findIndex((d) => d.id === panel)
     : -1;
   const next = idx >= 0 ? DESTINATIONS[(idx + 1) % DESTINATIONS.length] : null;
@@ -112,6 +112,9 @@ export default function App() {
           )}
         </div>
         <Loader done={ready} />
+        <button type="button" className="quick-view-fab" onClick={() => setPanel('overview')}>
+          Quick view
+        </button>
         {!noScene && (
           <>
             <Notices slow={WEBGL === 'slow'} reducedMotion={reducedMotion} />
@@ -138,6 +141,7 @@ export default function App() {
           onClose={closePanel}
           next={next}
           onNext={select}
+          onOpen={setPanel}
           sound={sound}
         />
       )}

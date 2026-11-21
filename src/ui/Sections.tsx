@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { DestinationId } from '../content/destinations';
+import { DESTINATION_BY_ID, type DestinationId } from '../content/destinations';
 import {
   certificates,
   contact,
@@ -245,5 +245,146 @@ export function ResumeBody() {
         Open résumé (PDF)
       </a>
     </p>
+  );
+}
+
+/** Small heading row for a Quick view block, with a link to the full section. */
+function QuickHead({ title, full, onOpen }: { title: string; full?: DestinationId; onOpen: (id: DestinationId) => void }) {
+  return (
+    <div className="quick__head">
+      <h3>{title}</h3>
+      {full && (
+        <button type="button" className="quick__more" onClick={() => onOpen(full)}>
+          Full {DESTINATION_BY_ID[full].title.toLowerCase()} <span aria-hidden="true">→</span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Everything on one page for recruiters in a hurry: summary, experience, projects,
+ * skills, education, certificates and contact. Built only from portfolio.ts.
+ */
+export function QuickViewBody({ onOpen }: { onOpen: (id: DestinationId) => void }) {
+  const intro = profile.about[0].paragraphs[0];
+  return (
+    <div className="quick">
+      <p className="lead">
+        <Rich text={intro} />
+      </p>
+      <div className="quick__actions">
+        {!isTodo(resumeUrl) && (
+          <a className="button" href={resumeUrl} target="_blank" rel="noreferrer">
+            Download résumé (PDF)
+          </a>
+        )}
+        <a className="button button--ghost" href={`mailto:${contact.email}`}>
+          Email
+        </a>
+        {contact.links.map((l) =>
+          isTodo(l.href) ? null : (
+            <a key={l.label} className="button button--ghost" href={l.href} target="_blank" rel="noreferrer">
+              {l.label}
+            </a>
+          ),
+        )}
+      </div>
+
+      <section className="quick__block">
+        <QuickHead title="Experience" full="experience" onOpen={onOpen} />
+        <Timeline entries={experience} />
+      </section>
+
+      <section className="quick__block">
+        <QuickHead title="Projects" full="projects" onOpen={onOpen} />
+        <ul className="quick__projects">
+          {projects.map((p) => (
+            <li key={p.title}>
+              <h4>
+                {p.title} <span className="project__tagline">— {p.tagline}</span>
+              </h4>
+              {(p.context || p.status) && (
+                <p className="meta">
+                  {p.context}
+                  {p.status && <span className="status-tag">{p.status}</span>}
+                </p>
+              )}
+              <p>{p.summary}</p>
+              <p>
+                {p.technologies.map((t) => (
+                  <span key={t} className="chip">{t}</span>
+                ))}
+              </p>
+              {p.links.length > 0 && <LinkRow links={p.links} />}
+            </li>
+          ))}
+        </ul>
+        <p className="meta">Also: {otherProjects.map((p) => p.title).join(' · ')}</p>
+      </section>
+
+      <section className="quick__block">
+        <QuickHead title="Skills" full="skills" onOpen={onOpen} />
+        {SECTIONS.skills()}
+      </section>
+
+      <section className="quick__block">
+        <QuickHead title="Education" onOpen={onOpen} />
+        <ul className="quick__list">
+          {education.map((e, i) => (
+            <li key={i}>
+              <strong>
+                <F v={e.title} />
+              </strong>
+              <span className="meta">
+                {' · '}
+                <F v={e.organisation} />
+                {e.period && (
+                  <>
+                    {' · '}
+                    <F v={e.period} />
+                  </>
+                )}
+                {e.details.map((d, j) => (
+                  <span key={j}>
+                    {' · '}
+                    <F v={d} />
+                  </span>
+                ))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="quick__block">
+        <QuickHead title="Certificates" full="certificates" onOpen={onOpen} />
+        <ul className="quick__list">
+          {certificates.map((c) => (
+            <li key={c.name}>
+              <strong>{c.name}</strong>
+              <span className="meta">
+                {' · '}
+                <F v={c.issuer} />
+                {c.date && <> · {c.date}</>}
+              </span>
+              {c.verifyUrl && (
+                <>
+                  {' '}
+                  <a className="quick__verify" href={c.verifyUrl} target="_blank" rel="noreferrer">
+                    Verify <span aria-hidden="true">↗</span>
+                  </a>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="quick__block">
+        <QuickHead title="Contact" onOpen={onOpen} />
+        <ContactBody />
+      </section>
+    </div>
   );
 }

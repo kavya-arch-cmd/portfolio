@@ -1,5 +1,9 @@
 # Changelog
 
+## Phase 06 — 2026-11-21 (Quick view and search/sharing)
+- Quick view: one page with Kavya's summary, résumé download, email/LinkedIn/GitHub, experience, projects, skills, education, certificates and contact — no drive needed. Opened from a "Quick view" header button (desktop) or a button at the top-left of the world (phones; usable while the world loads). Each block links to the full section page. Built only from `portfolio.ts` (`QuickViewBody` in `Sections.tsx`); `profile.title` added.
+- Search and link previews (`index.html`): title "Kavya Wani — Aspiring Data Scientist | Portfolio", description, canonical URL, Open Graph and Twitter tags with a 1200×630 preview image (`public/og-image.jpg`, source `branding/og-image.html`), schema.org Person data, and a `<noscript>` summary. Added `public/robots.txt` and `public/sitemap.xml`.
+
 ## Phase 05.1 — 2026-11-21 (phone camera)
 - Arrival close-ups now adapt to the screen shape (`shotFor` in `src/world/shots.ts`): on portrait phones the camera backs away along the same line of sight and re-centres until the whole signboard and building front fit, so names like "SKILLS & TECHNOLOGIES" are never cropped. Wide screens keep the authored shots.
 - The chase camera sits further back on narrow screens (`chaseScale` in `CameraRig.tsx`) so the car and the road around it stay in view instead of filling the screen.

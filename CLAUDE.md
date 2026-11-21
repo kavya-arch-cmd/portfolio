@@ -15,7 +15,7 @@ An interactive 3D portfolio website for **Kavya Wani** (Mumbai, India), an aspir
 - **Local folder:** `C:\Users\HP\Downloads\Portfolio`
 - **Owner's GitHub account:** `kavya-arch-cmd`
 
-The five destinations (exact labels): **ABOUT ME · PROJECTS · SKILLS & TECHNOLOGIES · EXPERIENCE & EDUCATION · CERTIFICATES**. Header links: Destinations menu (direct navigation), Resume, Contact.
+The five destinations (exact labels): **ABOUT ME · PROJECTS · SKILLS & TECHNOLOGIES · EXPERIENCE & EDUCATION · CERTIFICATES**. Header links: Destinations menu (direct navigation), Quick view (everything on one page; on phones it is a button at the top-left of the world), Resume, Contact.
 
 ---
 
@@ -30,7 +30,7 @@ Everything below is **done and live**:
 
 - Phase 05 (21 Nov 2026, live): mobile layout fixes, ambient sound toggle, smoother motion (throttled shadows, adaptive pixel ratio, paused rendering behind pages), WebGL / slow-3D / reduced-motion warnings. See `CHANGELOG.md`.
 
-**All work is committed and live** as of 21 Nov 2026, including the Phase 05.1 phone camera fix. The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
+**All work is committed and live** as of 21 Nov 2026, including Phase 06 (Quick view, search and link previews). The `branding/` folder (LinkedIn banner, tech-stack sheet) is **local only by choice** and is git-ignored — never commit it.
 
 **Open items / waiting on Kavya:**
 1. Certificate files for **Microsoft Excel (SkillCourse, 2026)** and **Web Designing & PHP Development (Asterix Solution, 2024)** — to add dates/"View certificate" links and confirm whether the college is "K P B" or "LBP" Hinduja.
@@ -112,7 +112,8 @@ React 19.3 + TypeScript 7.0 + Vite 8.3 · three.js 0.187 via @react-three/fiber 
 | `src/world/Landscape.tsx`, `Periphery.tsx` | Trees, rocks, grass clumps, flowers, pond, outer forest belt |
 | `src/world/Meadow.tsx`, `Village.tsx` | Meadow ground; windmill, crop field, haystacks |
 | `src/world/life.tsx` | Tree sway, chimney smoke, birds, pond ripples, arrival leaf burst (all freeze under reduced motion) |
-| `public/` | Published files: `CNAME`, `Kavya_Wani_Resume.pdf`, `projects/*.jpg` (real screenshots), `certificates/*.pdf` |
+| `public/` | Published files: `CNAME`, `Kavya_Wani_Resume.pdf`, `projects/*.jpg` (real screenshots), `certificates/*.pdf`, `og-image.jpg` (link preview), `robots.txt`, `sitemap.xml` |
+| `index.html` | Page title, description, link-preview (Open Graph/Twitter) tags and schema.org Person data — keep in step with `portfolio.ts` if the title, links or college change |
 | `resume-tools/` | Résumé generator (git-ignored, local only — see §8) |
 | `branding/` | LinkedIn banner and tech-stack sources (see §9); git-ignored, local only |
 | `DESIGN_SYSTEM.md` | Visual contract: palette, rules, approved changes. Read before UI/3D changes. |
@@ -165,6 +166,11 @@ One page, ATS-friendly, in the exact format of Kavya's original Word résumé (C
   chrome --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=1584,396 --screenshot=branding/linkedin-banner.png branding/linkedin-banner.html
   ```
   Keep important content out of the bottom-left (profile photo covers it).
+- **Link preview image:** `public/og-image.jpg` (1200×630) rendered from `branding/og-image.html` (uses `branding/og-world.jpg`, a crop of a desktop screenshot of the world):
+  ```
+  chrome --headless=new --hide-scrollbars --window-size=1200,630 --screenshot=branding/og-image.png branding/og-image.html
+  ```
+  then save it as JPEG to `public/og-image.jpg`. LinkedIn caches previews; use its Post Inspector to refresh after changing it.
 - **Tech stack PDF:** `Portfolio_Tech_Stack.pdf` (root) from `branding/tech-stack.html` — print with `chrome --headless=new --no-pdf-header-footer --print-to-pdf=Portfolio_Tech_Stack.pdf branding/tech-stack.html`; keep it one A4 page.
 
 ---

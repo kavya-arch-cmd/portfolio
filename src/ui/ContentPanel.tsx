@@ -1,23 +1,27 @@
 import { useEffect, useRef } from 'react';
 import { DESTINATION_BY_ID, type Destination, type DestinationId } from '../content/destinations';
-import { ContactBody, ResumeBody, SectionBody } from './Sections';
+import { profile } from '../content/portfolio';
+import { ContactBody, QuickViewBody, ResumeBody, SectionBody } from './Sections';
 import { SoundToggle } from './Sound';
 
-export type PanelId = DestinationId | 'resume' | 'contact';
+export type PanelId = DestinationId | 'resume' | 'contact' | 'overview';
 
-const EXTRA_TITLES = { resume: 'Resume', contact: 'Contact' } as const;
+const EXTRA_TITLES = { resume: 'Resume', contact: 'Contact', overview: profile.name } as const;
 
 export function ContentPanel({
   id,
   onClose,
   next,
   onNext,
+  onOpen,
   sound,
 }: {
   id: PanelId;
   onClose: () => void;
   next: Destination | null;
   onNext: (id: DestinationId) => void;
+  /** Open a section page directly (no drive), used by the Quick view. */
+  onOpen: (id: PanelId) => void;
   sound: { on: boolean; toggle: () => void };
 }) {
   const heading = useRef<HTMLHeadingElement>(null);
@@ -26,6 +30,7 @@ export function ContentPanel({
   useEffect(() => {
     returnFocus.current = document.activeElement;
     heading.current?.focus();
+    heading.current?.closest('.page__scroll')?.scrollTo(0, 0);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
@@ -36,7 +41,8 @@ export function ContentPanel({
     };
   }, [id, onClose]);
 
-  const title = id === 'resume' || id === 'contact' ? EXTRA_TITLES[id] : DESTINATION_BY_ID[id].title;
+  const title = id === 'resume' || id === 'contact' || id === 'overview' ? EXTRA_TITLES[id] : DESTINATION_BY_ID[id].title;
+  const kicker = id === 'overview' ? `Quick view · ${profile.title} · ${profile.location}` : 'KAVYA · Portfolio';
 
   return (
     <section className="page" role="dialog" aria-modal="true" aria-labelledby="panel-title">
@@ -52,13 +58,21 @@ export function ContentPanel({
       <div className="page__scroll">
         <div className="page__inner">
           <header className="page__hero">
-            <p className="page__kicker">KAVYA · Portfolio</p>
+            <p className="page__kicker">{kicker}</p>
             <h2 id="panel-title" ref={heading} tabIndex={-1}>
               {title}
             </h2>
           </header>
           <div className="page__body">
-            {id === 'resume' ? <ResumeBody /> : id === 'contact' ? <ContactBody /> : <SectionBody id={id} />}
+            {id === 'resume' ? (
+              <ResumeBody />
+            ) : id === 'contact' ? (
+              <ContactBody />
+            ) : id === 'overview' ? (
+              <QuickViewBody onOpen={onOpen} />
+            ) : (
+              <SectionBody id={id} />
+            )}
           </div>
           {next && (
             <footer className="page__foot">

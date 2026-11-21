@@ -162,6 +162,7 @@ The destination signboards should feel like part of the miniature environment, n
 Keep website chrome minimal so the miniature world remains the hero.
 
 - A compact header may contain KAVYA / PORTFOLIO branding, Resume and Contact.
+- Quick view (requested by Kavya 2026-11-21): a plain one-page summary of every section for recruiters in a hurry, in the same paper page style; a header link on desktop, a small charcoal button at the top-left of the world on phones. The world stays the hero.
 - Keep navigation clear and accessible.
 - Portfolio content opened after arrival must use the same warm, earthy design language.
 - Content pages must remain professional and readable; the 2.5D world should not make the actual information difficult to access.

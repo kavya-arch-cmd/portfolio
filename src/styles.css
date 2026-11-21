@@ -769,3 +769,107 @@ dd {
 .prose-section strong {
   font-weight: 700;
 }
+
+/* ── Quick view (everything on one page) ────────────────── */
+.quick-view-fab {
+  display: none;
+}
+.button--ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--line);
+}
+.button--ghost:hover {
+  background: var(--color-ground);
+}
+.quick__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 8px;
+}
+.quick__block {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.quick__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.quick__head h3 {
+  margin: 0;
+}
+.quick__more {
+  flex: none;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--color-terracotta);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.quick__more:hover {
+  text-decoration: underline;
+}
+.quick__projects,
+.quick__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.quick__projects > li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.quick__projects > li:first-child {
+  padding-top: 0;
+}
+.quick__projects p {
+  margin: 4px 0;
+}
+.quick__list > li {
+  padding: 7px 0;
+}
+.quick__verify {
+  color: var(--color-terracotta);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .nav__item--quick {
+    display: none;
+  }
+  .quick-view-fab {
+    display: inline-flex;
+    align-items: center;
+    position: absolute;
+    top: 12px;
+    left: var(--gutter);
+    z-index: 6; /* usable while the world is still loading */
+    min-height: 40px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .quick__actions .button {
+    width: auto;
+    flex: 1 1 auto;
+  }
+  .quick__actions .button:first-child {
+    flex-basis: 100%;
+  }
+  .quick__head {
+    flex-wrap: wrap;
+  }
+}

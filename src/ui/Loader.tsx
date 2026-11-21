@@ -13,7 +13,7 @@ export function Loader({ done }: { done: boolean }) {
         <div className="loader__road" aria-hidden="true">
           <span className="loader__car" />
         </div>
-        <p className="loader__hint">You can already use the Destinations menu above.</p>
+        <p className="loader__hint">Quick view and the Destinations menu already work.</p>
       </div>
     </div>
   );

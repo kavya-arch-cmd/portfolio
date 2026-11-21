@@ -32,6 +32,8 @@ export interface ProseSection {
 
 export const profile = {
   name: 'Kavya Wani',
+  /** Approved title (never "Aspiring Data Analyst"). */
+  title: 'Aspiring Data Scientist',
   location: 'Mumbai, India',
   about: [
     {

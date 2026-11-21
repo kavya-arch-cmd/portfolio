@@ -74,6 +74,9 @@ export function Header({
             </ul>
           )}
         </div>
+        <button className="nav__item nav__item--quick" onClick={() => onOpen('overview')} title="Everything on one page">
+          Quick view
+        </button>
         <button className="nav__item" onClick={() => onOpen('resume')}>
           Resume
         </button>
